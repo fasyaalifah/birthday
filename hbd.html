@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Paeja's Birthday</title>
+    <style>
+      :root {
+        --bg1: #061028;
+        --bg2: #1b2a4a;
+        --accent: #00d4ff;
+        --accent-2: #7c4dff;
+        --gold: #ffd166;
+        --glass: rgba(255, 255, 255, 0.03);
+        --muted: rgba(234, 246, 255, 0.85);
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+          sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, #0b132b 0%, #141c3d 60%, #1e2750 100%);
+  background-size: 22px 22px, 100% 100%;
+  background-attachment: fixed;
+  background-repeat: repeat;
+        color: #eaf6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+      }
+/* pastikan semua container transparan */
+main,
+#app,
+.container,
+.wrapper,
+.section {
+  background: transparent !important;
+}
+      
+
+      /* starfield */
+      .stars {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+      .stars:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(white 1px, transparent 1px);
+        opacity: 0.06;
+        background-size: 3px 3px;
+        transform: scale(1.6);
+      }
+
+      .wrap {
+        width: 100%;
+        max-width: 980px;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 10px 40px rgba(2, 6, 23, 0.6);
+        backdrop-filter: blur(6px);
+      }
+      header {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #041023;
+      }
+      h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      p.lead {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .centered {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .login-box {
+        width: 320px;
+        padding: 18px;
+        border-radius: 12px;
+        background: var(--glass);
+        box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+      }
+      input[type="password"],
+      input[type="date"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: transparent;
+        color: inherit;
+      }
+      .btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        color: #041023;
+      }
+      .btn-ghost {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .menu-item {
+        padding: 18px;
+        border-radius: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        cursor: pointer;
+        transition: transform 0.18s, box-shadow 0.18s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .menu-item:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      }
+      .menu-item.locked {
+        opacity: 0.6;
+        filter: grayscale(8%);
+      }
+      .menu-icon {
+        font-size: 28px;
+      }
+      .menu-title {
+        font-weight: 700;
+      }
+      .menu-sub {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .section {
+        min-height: 100vh;
+        padding: 20px;
+        border-radius: 12px;
+        background: none;
+        position: relative;
+      }
+      .back {
+        position: absolute;
+        left: 18px;
+        top: 18px;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .hidden {
+        display: none;
+      }
+
+      /* game grid */
+      .game-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .game-cell {
+        aspect-ratio: 1/1;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 18px;
+        user-select: none;
+      }
+      .game-cell:hover {
+        transform: scale(1.03);
+        transition: transform 0.12s;
+      }
+
+      /* balloons */
+      .balloon-stage {
+        position: relative;
+        height: 260px;
+        overflow: hidden;
+      }
+      .balloon {
+        position: absolute;
+        width: 68px;
+        height: 92px;
+        border-radius: 60%/70%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #041023;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      }
+      .balloon:after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -16px;
+        width: 2px;
+        height: 24px;
+        background: rgba(0, 0, 0, 0.06);
+        transform: translateX(-50%);
+      }
+
+
+      /* gift box */
+      .gift-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 18px;
+      }
+      .gift {
+        width: 160px;
+        height: 140px;
+        position: relative;
+        transform-origin: center;
+        transition: transform 0.45s;
+      }
+      .box-body {
+        width: 100%;
+        height: 70%;
+        background: linear-gradient(180deg, #0d3b5c, #04324f);
+        border-radius: 8px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+      .box-lid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: linear-gradient(90deg, #1b2a4a, #2a4a6f);
+        border-radius: 8px 8px 6px 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        transform-origin: center;
+      }
+      .ribbon {
+        position: absolute;
+        width: 18px;
+        height: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, #7c4dff, #00d4ff);
+        border-radius: 6px;
+      }
+      .bow {
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 56px;
+        height: 34px;
+        background: linear-gradient(90deg, #7c4dff, #00d4ff);
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      }
+      .gift.open .box-lid {
+        transform: translateY(-36px) rotateX(20deg);
+        transition: transform 0.9s cubic-bezier(0.2, 0.9, 0.2, 1);
+      }
+      .gift.open .box-body {
+        transform: translateY(8px) scale(1.02);
+        transition: transform 0.6s;
+      }
+      .kado-text {
+        font-size: 1.3rem;
+        font-weight: 800;
+        text-align: center;
+        margin-top: 12px;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: all 0.6s;
+      }
+      .kado-text.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* heart fall */
+      .heart {
+        position: fixed;
+        z-index: 9999;
+        pointer-events: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #7c4dff, #00d4ff);
+        transform: translateY(-40px) rotate(10deg);
+        opacity: 0.95;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 12px;
+      }
+
+      /* shake */
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-6px);
+        }
+        50% {
+          transform: translateX(6px);
+        }
+        75% {
+          transform: translateX(-4px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+      .shake {
+        animation: shake 0.45s;
+      }
+
+      @media (max-width: 880px) {
+
+        .gift {
+          width: 120px;
+          height: 100px;
+        }
+      }
+
+      /* --- lighter background saat main game kado --- */
+      #game-kado {
+        background: linear-gradient(180deg, #b3e5fc33, #d1c4e933);
+      }
+
+      /* --- animasi gift box baru --- */
+      .gift-box {
+        position: relative;
+        width: 140px;
+        height: 120px;
+        margin: 0 auto;
+      }
+      .gift-box .box {
+        width: 140px;
+        height: 90px;
+        background: linear-gradient(120deg, #4facfe, #00f2fe);
+        border-radius: 10px;
+      }
+      .gift-box .lid {
+        position: absolute;
+        top: -20px;
+        left: -5px;
+        width: 150px;
+        height: 40px;
+        background: linear-gradient(120deg, #43cea2, #185a9d);
+        border-radius: 8px;
+        animation: giftLid 1.5s ease forwards;
+      }
+      .gift-box .ribbon {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 16px;
+        height: 100%;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, #7c4dff, #00d4ff);
+        border-radius: 6px;
+      }
+      @keyframes giftLid {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px) rotate(-10deg);
+        }
+        100% {
+          transform: translateY(-25px);
+        }
+      }
+
+ .paper {
+  background: #fffaf3;
+  color: #3c2f2f;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+  max-width: 420px;
+  margin: 20px auto;
+  margin-top: 10px;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  border: 1px solid #e6dcd2;
+  position: relative;
+  animation: fadeInUp 1s ease forwards;
+}
+
+.paper::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #f0d9b5 0,
+    #f0d9b5 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  border-radius: 12px 12px 0 0;
+}
+
+.paper h2 {
+  color: #a11212;
+  margin-top: 0;
+  text-align: center;
+  font-size: 1em;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gift {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 40px auto;
+  cursor: pointer;
+  perspective: 800px;
+  transition: transform 0.3s ease;
+}
+
+.gift:hover {
+  transform: scale(1.05);
+}
+
+.gift-box {
+  width: 100%;
+  height: 80%;
+  background: linear-gradient(145deg, #ff4f6a, #ff6584);
+  border-radius: 0 0 12px 12px;
+  position: absolute;
+  bottom: 0;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.gift-lid {
+  width: 100%;
+  height: 28%;
+  background: linear-gradient(145deg, #ff7f9e, #ff3366);
+  border-radius: 8px 8px 0 0;
+  position: absolute;
+  top: 0;
+  transform-origin: top;
+  transition: transform 0.6s ease;
+  z-index: 3;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.ribbon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 100%;
+  background: linear-gradient(180deg, #fff, #f2f2f2);
+  z-index: 4;
+  border-radius: 3px;
+  box-shadow:
+    0 0 5px rgba(255, 255, 255, 0.6),
+    inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.ribbon::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(145deg, #fff, #f7e9e9);
+  border-radius: 4px;
+  z-index: 5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.gift.open .gift-lid {
+  transform: rotateX(-120deg);
+}
+
+.video-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.video-player {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Tombol kembali kecil dan di tengah */
+.gallery-back {
+  display: inline-block;
+  margin: 16px auto 0;
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #6a5acd, #4b3ca7);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(106, 90, 205, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.gallery-back:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(106, 90, 205, 0.5);
+}
+
+
+@keyframes jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+
+
+    </style>
+  </head>
+  <body>
+    <div class="stars"></div>
+    
+
+    <!-- SPLASH -->
+    <div
+      class="splash"
+      id="splash"
+      style="
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 50;
+        background: linear-gradient(
+          180deg,
+          rgba(2, 6, 23, 0.9),
+          rgba(2, 6, 23, 0.65)
+        );
+      "
+    >
+      <div
+        style="
+          width: 92%;
+          max-width: 520px;
+          padding: 28px;
+          border-radius: 14px;
+          background: linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.01)
+          );
+          text-align: center;
+        "
+      >
+
+ <img
+        src="paeja.jpg"
+        alt="Foto Paeja"
+        class="intro-photo"
+        style="
+          width: 120px;
+          height: 120px;
+          object-fit: cover;
+          border-radius: 50%;
+          border: 3px solid #a27bff;
+          box-shadow: 0 0 25px rgba(162, 123, 255, 0.3);
+          margin-bottom: 18px;
+        "
+      />
+
+        <h2 style="margin: 0">PAEJA IS TURNING 23!</h2>
+        <p class="muted" style="margin-top: 8px">
+          LET'S START THE GAME!
+        </p>
+        <div
+          style="
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+          "
+        >
+          <button class="btn btn-primary" id="startBtn">Start</button>
+        </div>
+      </div>
+    </div>
+
+        </header>
+
+        <!-- LOGIN -->
+        <div id="screen-login" class="centered hidden">
+          <div class="login-box">
+            <h3 style="margin: 0">Aku kalo manggil nama kamu?</h3>
+            <p class="muted"></p>
+            <input id="pw" type="password" placeholder="password" />
+            <div style="display: flex; gap: 8px; margin-top: 10px">
+              <button class="btn btn-primary" onclick="tryLogin()">
+                Masuk
+              </button>
+            </div>
+            <p
+              id="pw-error"
+              class="muted hidden"
+              style="color: #ff8a80; margin-top: 8px"
+            >
+               SALAHHHH!!!!!!
+            </p>
+          </div>
+        </div>
+
+        <!-- MENU -->
+        <div id="screen-menu" class="hidden">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div>
+              <h2 style="margin: 0">Halo Sayang ❤️</h2>
+              <p class="muted">
+                PILIH SATU-SATU YAAA!!!!
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center">
+              <button class="btn btn-ghost" onclick="resetAll()">Reset</button>
+            </div>
+          </div>
+
+          <div class="menu-grid" style="margin-top: 14px">
+            <div id="item-kado" class="menu-item" onclick="onMenuClick('kado')">
+              <div class="menu-icon">🎁</div>
+              <div class="menu-title">The Gift</div>
+              <div class="menu-sub">Surprise Inside!</div>
+            </div>
+
+            <div
+              id="item-gallery"
+              class="menu-item"
+              onclick="onMenuClick('gallery')"
+            >
+              <div class="menu-icon">🖼️</div>
+              <div class="menu-title">Memories</div>
+              <div class="menu-sub">A Moment Remembered</div>
+            </div>
+
+            <div
+              id="item-card"
+              class="menu-item"
+              onclick="onMenuClick('surat')"
+            >
+              <div class="menu-icon">💌</div>
+              <div class="menu-title">Birthday Wishes</div>
+              <div class="menu-sub">From My Heart</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION AREA -->
+        <div id="screen-section" class="hidden">
+          <!-- GAME KADO -->
+          <div id="game-kado" class="section hidden">
+            <h3>Find My Heart ❤️</h3>
+            <p class="muted">Temuin love dulu baru bisa buka, hehe</p>
+            <div id="game1" class="game-grid"></div>
+            <div id="g1-msg" class="muted" style="margin-top: 8px"></div>
+          </div>
+
+          <!-- GAME GALLERY -->
+          <div id="game-gallery" class="section hidden">
+            <h3>Pop the Balloons 🎈</h3>
+            <p class="muted">Pecahin Balonnya!!!!</p>
+            <div id="game2" class="balloon-stage"></div>
+            <div id="g2-msg" class="muted" style="margin-top: 8px"></div>
+          </div>
+
+          <!-- GAME KARTU -->
+          <div id="game-kartu" class="section hidden">
+            <h3>Special Date</h3>
+            <p class="muted">Inget ga kapan kita jadian?!</p>
+            <div style="margin-top: 12px; max-width: 360px">
+              <input id="date-input" type="date" />
+              <div
+                style="
+                  display: flex;
+                  gap: 8px;
+                  margin-top: 10px;
+                  justify-content: flex-end;
+                "
+              >
+                <button class="btn btn-primary" onclick="checkDate()">
+                  Cek
+                </button>
+                <button class="btn btn-ghost" onclick="backToMenu()">
+                  Batal
+                </button>
+              </div>
+              <div id="g3-msg" class="muted" style="margin-top: 10px"></div>
+            </div>
+          </div>
+
+          <!-- SECTION KADO (opened content) -->
+          <!-- SECTION KADO -->
+<div id="section-kado" class="section hidden">
+  <h3>Klik kotaknya!!</h3>
+  <p class="muted"></p>
+
+  <div class="gift" onclick="openGift()">
+    <div class="gift-lid"></div>
+    <div class="gift-box"></div>
+    <div class="ribbon"></div>
+  </div>
+
+  <p id="gift-message" style="margin-top:20px; font-size:1.1em; display:none;">
+    Temuin akuu dulu kalo mau liat kadonyaa HEHEHE~  
+    
+  </p>
+
+  <div style="text-align:center; margin-top:16px;">
+    <button class="btn btn-primary" onclick="backToMenu()">Kembali</button>
+  </div>
+</div>
+
+
+          <!-- SECTION GALLERY -->
+          <div id="section-gallery" class="section hidden">
+  <h3>a lil bit memory of us </h3>
+  <p class="muted"></p>
+
+  <div class="video-wrapper" style="margin-top: 16px;">
+    <video controls class="video-player">
+      <source src="video1.mp4" type="video/mp4" />
+      Browser kamu tidak mendukung pemutar video.
+    </video>
+  </div>
+
+  <button class="gallery-back" onclick="backToMenu()">Kembali</button>
+</div>
+
+
+
+       
+<!-- SECTION KARTU -->
+<!-- SECTION KARTU -->
+<!-- SECTION KARTU -->
+<div id="section-surat" class="section hidden">
+  <div class="paper">
+    <h2>Hi Sayang!</h2>
+    <p>
+      Selamat bertambah usia kesayanganku, cintakuu, duniakuuu
+    </p>
+    <p>
+      makaciii sayang sudah lahir dan kembali hadir di hidup akuu. semoga selalu sehat, bahagia, dan selalu dikelilingin hal hal baik yaa sayang. 
+    </p>
+   
+    <p>
+      kurang-kurangin yangg ngeselinnyaaa, udahh semakinn tuaa MWHEHEHEHE
+    </p>
+
+    <p>mulaii hari inii dann seterusnyaa kalo hari kamu lagi buruk dan lagi ngerasa sendirian ingett yangg kamuu punya akuu.
+      akan aku buat lebihh buruk yangg tenangg HAHAHAHAA</p>
+
+    <p>
+      SEKALI LAGII HAPPY BIRTHDAYY PAEJAKUU SAYANGGGG!!!!
+      kalo masih ada doa lain, doa sendiri yangg nanti akuu bantu amininn 
+    </p>
+      <p>
+      Love you,  u always being my paeja💕 
+    </p>
+  </div>
+
+  <div style="text-align:center; margin-top:16px;">
+    <button class="btn btn-primary" onclick="backToMenu()">Kembali</button>
+  </div>
+</div>
+
+
+
+
+        
+
+        <!-- background music element (play after Start click) -->
+        <audio id="bgm" loop>
+  <source src="lagu.mp3" type="audio/mpeg" />
+</audio>
+
+      </div>
+    </div>
+
+    <!-- confetti lib -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+      /* ====== State & Config ====== */
+      const PASSWORD = "paeja";
+      const SPECIAL_DATE = "2025-02-26"; // jadian
+      const state = { unlocked: { kado: false, gallery: false, surat: false } };
+
+      /* ===== splash start (play music via user click) ===== */
+      document.getElementById("startBtn").addEventListener("click", () => {
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("screen-login").classList.remove("hidden");
+        const bgm = document.getElementById("bgm");
+        bgm.play().catch(() => {
+          /* maybe blocked, but this click normally allows */
+        });
+      });
+
+      /* ===== login ===== */
+      function tryLogin() {
+        const v = document.getElementById("pw").value.trim();
+        if (v === PASSWORD) {
+          document.getElementById("screen-login").classList.add("hidden");
+          document.getElementById("screen-menu").classList.remove("hidden");
+          // small welcome sparkle
+          confetti({
+            particleCount: 60,
+            spread: 140,
+            colors: [
+              getComputedStyle(document.documentElement)
+                .getPropertyValue("--gold")
+                .trim(),
+              "#00d4ff",
+              "#7c4dff",
+            ],
+          });
+        } else {
+          const e = document.getElementById("pw-error");
+          e.classList.remove("hidden");
+          setTimeout(() => e.classList.add("hidden"), 2000);
+        }
+      }
+      function fillHint() {
+        alert("Hint: kata singkatan dari nama panggilan.");
+      }
+
+      /* ===== menu click: show game for that menu (if unlocked, show content) ===== */
+      function onMenuClick(key) {
+        if (state.unlocked[key]) {
+          openContent(key);
+          return;
+        }
+        // hide menu, show screen-section and correct game view
+        document.getElementById("screen-menu").classList.add("hidden");
+        document.getElementById("screen-section").classList.remove("hidden");
+        hideAllSections();
+        if (key === "kado")
+          document.getElementById("game-kado").classList.remove("hidden");
+        if (key === "gallery")
+          document.getElementById("game-gallery").classList.remove("hidden");
+        if (key === "surat")
+          document.getElementById("game-kartu").classList.remove("hidden");
+      }
+
+      /* hide helpers */
+      function hideAllSections() {
+        const ids = [
+          "game-kado",
+          "game-gallery",
+          "game-kartu",
+          "section-kado",
+          "section-gallery",
+          "section-surat",
+        ];
+        ids.forEach((id) =>
+          document.getElementById(id).classList.add("hidden")
+        );
+      }
+      function backToMenu() {
+        document.getElementById("screen-section").classList.add("hidden");
+        document.getElementById("screen-menu").classList.remove("hidden");
+      }
+
+      /* unlock visuals */
+      function unlock(key) {
+        state.unlocked[key] = true;
+        const el = document.getElementById("item-" + key);
+        if (el) {
+          el.classList.remove("locked");
+          el.querySelector(".menu-sub").textContent =
+            "";
+        }
+        confetti({
+          particleCount: 80,
+          spread: 160,
+          colors: [
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--gold")
+              .trim(),
+            "#ffffff",
+            "#00d4ff",
+          ],
+        });
+      }
+
+      /* open content after unlock */
+      function openContent(key) {
+        document.getElementById("screen-menu").classList.add("hidden");
+        document.getElementById("screen-section").classList.remove("hidden");
+        hideAllSections();
+        if (key === "kado") {
+          document.getElementById("section-kado").classList.remove("hidden");
+          animateKadoOpen();
+        }
+        if (key === "gallery") {
+          document.getElementById("section-gallery").classList.remove("hidden");
+        }
+        if (key === "surat") {
+          document.getElementById("section-surat").classList.remove("hidden");
+        }
+      }
+
+      /* ===== GAME 1: Find My Heart (for Kado) ===== */
+      /* ===== GAME 1: Find My Heart (for Kado) - FIXED VERSION ===== */
+      let g1_answer = null,
+        g1_done = false;
+      function initGame1() {
+        const grid = document.getElementById("game1");
+        const msg = document.getElementById("g1-msg");
+        grid.innerHTML = "";
+        msg.textContent = "Cari hati yang sembunyi 💙";
+        const total = 16;
+        g1_answer = Math.floor(Math.random() * total);
+        g1_done = false;
+
+        for (let i = 0; i < total; i++) {
+          const cell = document.createElement("div");
+          cell.className = "game-cell";
+          cell.textContent = "?";
+          cell.onclick = () => {
+            if (g1_done) return;
+            if (i === g1_answer) {
+              cell.innerHTML = "❤️";
+              cell.style.background = "linear-gradient(120deg,#b2fefa,#0ed2f7)";
+              g1_done = true;
+              msg.textContent = "❤️ KETEMUUU!!!!";
+              setTimeout(() => showKadoGift(), 800);
+            } else {
+              cell.innerHTML = "✖";
+              cell.style.opacity = 0.6;
+              msg.textContent = randomMiss();
+            }
+          };
+          grid.appendChild(cell);
+        }
+      }
+      function randomMiss() {
+        const msgs = [
+          "Hehe, bukan di sini sayangg",
+          "Bukann, bukan yang inii yang",
+          "Salah yangg",
+        ];
+        return msgs[Math.floor(Math.random() * msgs.length)];
+      }
+      function showKadoGift() {
+        const section = document.getElementById("game-kado");
+        unlock("kado");
+        setTimeout(() => openContent("kado"), 900);
+        spawnConfetti(150);
+      }
+
+      /* ===== GAME 2: Pop the Balloons (for Gallery) ===== */
+      let g2_total = 7,
+        g2_pop = 0,
+        g2_done = false;
+      function initGame2() {
+        const stage = document.getElementById("game2");
+        stage.innerHTML = "";
+        g2_pop = 0;
+        g2_done = false;
+        document.getElementById("g2-msg").textContent = "Klik semua balon!";
+        const colors = [
+          "#00d4ff",
+          "#7c4dff",
+          "#ffd166",
+          "#90caf9",
+          "#b39ddb",
+          "#81d4fa",
+        ];
+        for (let i = 0; i < g2_total; i++) {
+          const b = document.createElement("div");
+          b.className = "balloon";
+          const left = Math.random() * 80 + 5;
+          const size = 60 + Math.random() * 40;
+          b.style.left = left + "%";
+          b.style.bottom = -Math.random() * 200 + "px";
+          b.style.width = size + "px";
+          b.style.height = size * 1.25 + "px";
+          b.style.background = colors[i % colors.length];
+          b.innerHTML = "❤️";
+          const dur = 7000 + Math.random() * 4000;
+          b.animate(
+            [
+              { transform: "translateY(0)" },
+              { transform: "translateY(-420px)" },
+            ],
+            { duration: dur, iterations: Infinity }
+          );
+          b.onclick = (e) => {
+            if (g2_done) return;
+            e.stopPropagation();
+            popBalloon(b);
+          };
+          stage.appendChild(b);
+        }
+      }
+      function popBalloon(el) {
+        if (el.dataset.popped) return;
+        el.dataset.popped = 1;
+        el.style.transform = "scale(0.1)";
+        el.style.opacity = 0;
+        g2_pop++;
+        document.getElementById(
+          "g2-msg"
+        ).textContent = `Balon pecah: ${g2_pop} / ${g2_total}`;
+        confetti({
+          particleCount: 24,
+          spread: 60,
+          origin: { x: Math.random() },
+          colors: ["#00d4ff", "#7c4dff", "#ffd166"],
+        });
+        // small message bubble
+        if (g2_pop >= g2_total) {
+          g2_done = true;
+          document.getElementById("g2-msg").textContent =
+            "Semua balon pecah! Galeri kebuka.";
+          unlock("gallery");
+          setTimeout(() => openContent("gallery"), 900);
+        }
+      }
+
+      /* ===== GAME 3: Date check (for Kartu) ===== */
+      function checkDate() {
+  const v = document.getElementById("date-input").value;
+  const msg = document.getElementById("g3-msg");
+  if (!v) {
+    msg.textContent = "Isi dulu tanggalnya.";
+    return;
+  }
+  if (v === SPECIAL_DATE) {
+    msg.textContent = "INGET TERNYATAA!!";
+    playChime();
+    spawnHearts(16, 1200);
+    // unlock and open after 2s
+    unlock("surat");
+    setTimeout(() => openContent("surat"), 1800);
+  } else {
+    msg.textContent = "Hmm.......";
+    const el = document.getElementById("date-input");
+    el.classList.add("shake");
+    setTimeout(() => el.classList.remove("shake"), 460);
+  }
+}
+
+      
+
+      /* ===== Gift animation & open ===== */
+      function animateKadoOpen() {
+        const gift = document.getElementById("gift");
+        gift.classList.remove("open");
+        // small wiggle then open
+        gift.animate(
+          [
+            { transform: "translateY(0)" },
+            { transform: "translateY(-8px)" },
+            { transform: "translateY(0)" },
+          ],
+          { duration: 500 }
+        );
+        setTimeout(() => {
+          gift.classList.add("open");
+          playPop();
+          spawnConfetti(120);
+          document.getElementById("kado-text").classList.add("visible");
+        }, 650);
+      }
+
+      /* confetti helper wrappers */
+      function spawnConfetti(count) {
+        confetti({
+          particleCount: count,
+          spread: 160,
+          colors: ["#ffd166", "#00d4ff", "#7c4dff", "#ffffff"],
+        });
+      }
+
+      function showAngryGift() {
+    // kode animasi marah
+}
+
+
+      /* hearts falling (blue-purple gradient hearts) */
+      function spawnHearts(n, duration) {
+        for (let i = 0; i < n; i++) {
+          const el = document.createElement("div");
+          el.className = "heart";
+          el.style.left = 10 + Math.random() * 80 + "%";
+          el.style.top = -10 - Math.random() * 30 + "px";
+          el.style.width = 14 + Math.random() * 18 + "px";
+          el.style.height = el.style.width;
+          el.style.borderRadius = "6px";
+          el.style.background = `linear-gradient(45deg, #7c4dff, #00d4ff)`;
+          el.style.opacity = 0.95;
+          el.innerHTML = "❤";
+          document.body.appendChild(el);
+          const fallTime = duration + Math.random() * 1000;
+          el.animate(
+            [
+              {
+                transform: `translateY(0) rotate(${
+                  Math.random() * 40 - 20
+                }deg)`,
+                opacity: 1,
+              },
+              {
+                transform: `translateY(${window.innerHeight + 200}px) rotate(${
+                  Math.random() * 720 - 360
+                }deg)`,
+                opacity: 0.2,
+              },
+            ],
+            { duration: fallTime, easing: "cubic-bezier(.2,.8,.2,1)" }
+          );
+          setTimeout(() => el.remove(), fallTime + 50);
+        }
+      }
+
+      /* ===== sound: small chime & pop using WebAudio (no external file) ===== */
+      const audioCtx =
+        window.AudioContext || window.webkitAudioContext
+          ? new (window.AudioContext || window.webkitAudioContext)()
+          : null;
+
+      function playChime() {
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = "sine";
+        o.frequency.setValueAtTime(880, now);
+        o.frequency.exponentialRampToValueAtTime(1320, now + 0.35);
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(0.12, now + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "highpass";
+        filter.frequency.setValueAtTime(800, now);
+        o.connect(filter);
+        filter.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now);
+        o.stop(now + 1.2);
+      }
+      function playPop() {
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(450, now);
+        o.frequency.exponentialRampToValueAtTime(220, now + 0.18);
+        g.gain.setValueAtTime(0, now);
+        g.gain.linearRampToValueAtTime(0.16, now + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now);
+        o.stop(now + 0.4);
+      }
+
+
+      /* ===== reset/testing ===== */
+      function resetAll() {
+        if (!confirm("Reset progress?")) return;
+        state.unlocked = { kado: false, gallery: false, surat: false };
+        document.getElementById("screen-section").classList.add("hidden");
+        document.getElementById("screen-menu").classList.remove("hidden");
+        document.querySelectorAll(".menu-item").forEach((el) => {
+          el.classList.remove("locked");
+          el.querySelector(".menu-sub").textContent =
+            "Klik untuk mainkan game dan buka";
+        });
+        initAllGames();
+      }
+
+      /* ===== init games & restore card ===== */
+      function initAllGames() {
+        initGame1();
+        initGame2();
+        // initGame3 uses date input and checkDate
+        const saved = localStorage.getItem("hbd_card");
+        if (saved) document.getElementById("surat-preview").textContent = saved;
+      }
+      initAllGames();
+
+      /* ensure bgm play on first user gesture if blocked earlier */
+      document.addEventListener(
+        "click",
+        () => {
+          const a = document.getElementById("bgm");
+          if (a && a.paused) a.play().catch(() => {});
+        },
+        { once: true }
+      );
+
+      /* small UI: unlock state polling to update menu items (persistent during session) */
+      setInterval(() => {
+        ["kado", "gallery", "surat"].forEach((k) => {
+          if (state.unlocked[k]) {
+            const el = document.getElementById("item-" + k);
+            if (el && el.classList.contains("locked"))
+              el.classList.remove("locked");
+          }
+        });
+      }, 500);
+
+      /* keyboard: enter to submit date when in date input */
+      document.getElementById("date-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") checkDate();
+      });
+
+      /* Accessibility: allow pressing Enter on password input */
+      document.getElementById("pw").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") tryLogin();
+      });
+
+      /* show small visual bump when clicking locked item */
+      document.querySelectorAll(".menu-item").forEach((mi) => {
+        mi.addEventListener("click", () => {
+          if (mi.classList.contains("locked")) {
+            mi.animate(
+              [
+                { transform: "translateY(0)" },
+                { transform: "translateY(-6px)" },
+                { transform: "translateY(0)" },
+              ],
+              { duration: 280 }
+            );
+          }
+           });
+
+   function openCard() {
+  const env = document.querySelector('.surat');
+  env.classList.toggle('open');
+  if (env.classList.contains('open')) {
+    spawnConfetti(100);
+    playChime();
+  }
+}
+
+ });
+
+function openGift() {
+  const gift = document.querySelector('.gift');
+  const msg = document.getElementById('gift-message');
+  if (!gift.classList.contains('open')) {
+    gift.classList.add('open');
+    playChime();
+    spawnConfetti(80);
+    msg.style.display = 'block';
+    msg.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600 });
+  }
+}
+
+
+    </script>
+
+    <!-- library confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const startBtn = document.getElementById("startBtn");
+  const bgm = document.getElementById("bgm");
+  const video = document.querySelector(".video-player");
+
+  // === Musik & Video ===
+  if (video && bgm) {
+    video.addEventListener("play", () => bgm.pause());
+    video.addEventListener("ended", () => bgm.play().catch(() => {}));
+    video.addEventListener("pause", () => bgm.play().catch(() => {}));
+  }
+
+  if (startBtn && bgm) {
+    startBtn.addEventListener("click", () => {
+      bgm.volume = 0.5;
+      bgm.play().catch(err => console.warn("Autoplay diblokir:", err));
+
+      // hentikan confetti waktu tombol Start diklik
+      clearInterval(confettiInterval);
+      // kasih 1x ledakan confetti besar di akhir
+      confetti({
+        particleCount: 200,
+        spread: 180,
+        startVelocity: 45,
+        origin: { y: 0.6 },
+      });
+    });
+  }
+
+  // === Efek Confetti Turun Terus ===
+  let confettiInterval = setInterval(() => {
+    confetti({
+      particleCount: 5,
+      startVelocity: 20,
+      spread: 360,
+      ticks: 60,
+      gravity: 0.4, // makin besar makin cepat jatuh
+      origin: {
+        x: Math.random(),
+        y: 0, // dari atas layar
+      },
+      colors: ['#ff5f6d', '#ffc371', '#7ed957', '#50bfe6', '#a15ffb']
+    });
+  }, 150); // muncul tiap 0.15 detik
+});
+</script>
+
+
+
+  </body>
+</html>
